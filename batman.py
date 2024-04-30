@@ -1,6 +1,7 @@
 from math import inf
 import random
 import math
+from functools import cache
 
 num_crimes = []  
 rest = [] 
@@ -12,59 +13,42 @@ def generate(m):
 
 
 def max_crimes(m):
-    cache = {}
-    cache[-1] = 0
-    path = []
+    @cache
     def MC(i):
         if i < 0:
-            return 0
-        if i not in cache:
-            maxi = 0
-            for k in range(i):
-                if k + rest[k] + 1 == i:
-                    temp = MC(k)
-                    if maxi < temp:
-                        maxi = temp
-            include = num_crimes[i] + maxi
-            exclude = MC(i-1)
-            cache[i] = max(include, exclude)
-            if include > exclude:
-                path.append(i)
-        return cache[i]
+            return 0ds
+        else:
+            include = num_crimes[i] + max((MC(k) for k in range(i) if k + rest[k] + 1 == i), default=-inf)
+            exclude = MC(i - 1)
+            return max(include, exclude)
     ans = MC(m)
-    print(f"MY PATH = {path}")
+    """print(f"MY PATH = {path}")
     for i in range(m+1):
         if i in cache:
             print(cache[i], end=" ")
         else:
             print("x ", end="")
-    print()
+    print()"""
     return ans
     
 
 def Max_Crimes_Left(m): #Max crimes left, aka the value i represents nights left
-    cache = {}
-    cache[m] = num_crimes[m]
-    path = []
+    @cache
     def MCL(i):
-        if i > m:
+        if i <= 0:
             return 0
-        if i not in cache:
-            include = num_crimes[i] + MCL(i+1+rest[i])
-            exclude = MCL(i+1)
-            cache[i] = max(include, exclude)
-            if include > exclude:
-                path.append(i)
-        return cache[i]
-    ans = MCL(0)
-    print(f"HOURANI PATH = {path}")
+        include = num_crimes[m-i] + MCL(i-1-rest[m-i])
+        exclude = MCL(i-1)
+        return max(include, exclude)
+    ans = MCL(m)
+    # print(f"HOURANI PATH = {path}")
     return ans
 
 
 
-days = 6
+days = 1000
 generate(days)
 print(max_crimes(days-1))
 print(Max_Crimes_Left(days-1))
-print(num_crimes)
-print(rest)
+# print(num_crimes)
+# print(rest)
