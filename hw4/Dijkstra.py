@@ -59,9 +59,8 @@ adj_lists = {
 def dijkstra(adj_list, root):
     heap = binaryheap()
     n = len(adj_list)
-    dist = {}
-    for i in range(n):
-        dist[i] = inf
+    dist = [inf] * n
+    
     dist[root] = 0
     heap.push((root, 0))
     already_popped = []
