@@ -18,8 +18,66 @@ def quicksort(list):
     else:
         return list
 
+'''
+def partition(list,low,high):
+    pivot = randrange(low,high+1)
+
+    #this swaps the random pivot with the last element
+    temp = list[pivot]
+    list[pivot] = list[high]
+    list[high] = temp
+
+    i = low
+    j = high -1
+    while i < j:
+        if list[i] > list[high]:
+            temp = list[i]
+            list[i] = list[j]
+            list[j] = temp
+            j -= 1
+        else:
+            i += 1
+    
+    if(list[i] < list[high]):
+        temp = list[i+1]
+        list[i+1] = list[high]
+        list[high] = temp
+        return i+1
+    else:
+        temp = list[i]
+        list[i] = list[high]
+        list[high] = temp
+        return i
+'''
 
 def partition(list,low,high):
+    pivot = randrange(low,high+1)
+
+    #this swaps the random pivot with the last element
+    temp = list[pivot]
+    list[pivot] = list[high]
+    list[high] = temp
+
+    i = low
+    j = high -1
+    while i <= j:
+        if list[i] < list[high]:
+            if list[j] > list[high]:
+                temp = list[i]
+                list[i] = list[j]
+                list[j] = temp
+                j -= 1
+                i += 1
+            else:
+                j -= 1
+        else:
+            i += 1
+    
+    
+    temp = list[i]
+    list[i] = list[high]
+    list[high] = temp
+    return i
 
 
 def cppquicksort(list, low, high):
@@ -36,7 +94,8 @@ def cppquicksort(list, low, high):
 
 def main():
     list = [7,8,3,1,4,2,6,5]
-    print(quicksort(list))
+    cppquicksort(list, 0, 7)
+    print(list)
 
 
 main()
